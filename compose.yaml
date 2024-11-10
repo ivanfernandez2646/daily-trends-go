@@ -1,0 +1,4 @@
+name: daily-trends-go
+
+include:
+  - compose-mongodb.yaml
