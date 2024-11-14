@@ -27,6 +27,6 @@ func NewRandomUUID() UUID {
 	}
 }
 
-func (u *UUID) Value() string {
+func (u UUID) Value() string {
 	return u.value
 }

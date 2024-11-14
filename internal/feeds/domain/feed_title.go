@@ -6,10 +6,11 @@ import (
 
 type FeedTitle string
 
-func NewFeedTitle(value string) (FeedTitle, error) {
+func NewFeedTitle(value string) (*FeedTitle, error) {
 	if value == "" {
-		return "", shared_domain.NewInvalidArgumentError("feed title must not be empty")
+		return nil, shared_domain.NewInvalidArgumentError("feed title must not be empty")
 	}
 
-	return FeedTitle(value), nil
+	val := FeedTitle(value)
+	return &val, nil
 }

@@ -42,7 +42,7 @@ func (p *CollyFeedScraper) processUrl(extractor domain.FeedContentExtractor, res
 
 	c.OnHTML("article", func(e *colly.HTMLElement) {
 		sw.RLock()
-		if len(*res) >= 50 {
+		if len(*res) >= 40 {
 			return
 		}
 		sw.RUnlock()

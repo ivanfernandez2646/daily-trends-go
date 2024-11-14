@@ -21,7 +21,7 @@ func WithTitle(value string) FeedOption {
 			return err
 		}
 
-		f.title = title
+		f.title = *title
 		return nil
 	}
 }
