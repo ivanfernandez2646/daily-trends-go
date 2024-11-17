@@ -11,6 +11,7 @@ type FeedContentExtractor interface {
 	GetSelectors() FeedContentSelectors
 	GetURL() string
 	GetSource() FeedSource
+	GetLimit() int
 }
 
 type FeedScraper interface {

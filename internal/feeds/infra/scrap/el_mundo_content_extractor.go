@@ -20,3 +20,7 @@ func (s ElMundoContentExtractor) GetURL() string {
 func (s ElMundoContentExtractor) GetSource() domain.FeedSource {
 	return domain.FeedSource(domain.EL_MUNDO)
 }
+
+func (s ElMundoContentExtractor) GetLimit() int {
+	return 15
+}

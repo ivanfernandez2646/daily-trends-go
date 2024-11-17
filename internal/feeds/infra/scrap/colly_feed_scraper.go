@@ -35,17 +35,18 @@ func (p *CollyFeedScraper) Execute(extractors []domain.FeedContentExtractor) ([]
 func (p *CollyFeedScraper) processUrl(extractor domain.FeedContentExtractor, res *[]*domain.Feed, sw *sync.RWMutex, wg *sync.WaitGroup) {
 	defer wg.Done()
 
+	var tmpRes []*domain.Feed
+
 	url := extractor.GetURL()
 	selectors := extractor.GetSelectors()
+	limit := extractor.GetLimit()
 
 	c := colly.NewCollector()
 
 	c.OnHTML("article", func(e *colly.HTMLElement) {
-		sw.RLock()
-		if len(*res) >= 40 {
+		if len(tmpRes) >= limit {
 			return
 		}
-		sw.RUnlock()
 
 		txtAuthor := e.ChildText(selectors.AuthorSelector)
 		txtTitle := e.ChildText(selectors.TitleSelector)
@@ -62,9 +63,7 @@ func (p *CollyFeedScraper) processUrl(extractor domain.FeedContentExtractor, res
 			return
 		}
 
-		sw.Lock()
-		*res = append(*res, data)
-		sw.Unlock()
+		tmpRes = append(tmpRes, data)
 	})
 
 	if selectors.DecodeChars {
@@ -74,4 +73,7 @@ func (p *CollyFeedScraper) processUrl(extractor domain.FeedContentExtractor, res
 	}
 
 	c.Visit(url)
+	sw.Lock()
+	*res = append(*res, tmpRes...)
+	sw.Unlock()
 }

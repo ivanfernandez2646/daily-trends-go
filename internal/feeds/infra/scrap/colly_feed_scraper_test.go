@@ -10,9 +10,15 @@ import (
 
 func TestCollyScraper(t *testing.T) {
 	colly := scrap.NewCollyFeedScraper()
+	extractors := []domain.FeedContentExtractor{scrap.ElMundoContentExtractor{}, scrap.ElPaisContentExtractor{}}
 
-	res, err := colly.Execute([]domain.FeedContentExtractor{scrap.ElMundoContentExtractor{}, scrap.ElPaisContentExtractor{}})
+	var limit int
+	for _, extractor := range extractors {
+		limit += extractor.GetLimit()
+	}
+
+	res, err := colly.Execute(extractors)
 
 	assert.Nil(t, err)
-	assert.Equal(t, 40, len(res))
+	assert.Equal(t, limit, len(res))
 }

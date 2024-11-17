@@ -19,3 +19,7 @@ func (s ElPaisContentExtractor) GetURL() string {
 func (s ElPaisContentExtractor) GetSource() domain.FeedSource {
 	return domain.FeedSource(domain.EL_PAIS)
 }
+
+func (s ElPaisContentExtractor) GetLimit() int {
+	return 20
+}
