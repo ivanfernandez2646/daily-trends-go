@@ -2,8 +2,8 @@ package xcron
 
 import (
 	"daily-trends/go/internal/feeds/application"
-	"fmt"
 	"log"
+	"time"
 
 	"github.com/robfig/cron/v3"
 )
@@ -17,16 +17,25 @@ func NewCronScraper(scraperCreator *application.FeedScraperCreator) *CronScraper
 }
 
 func (cs CronScraper) StartJob() {
-	c := cron.New()
+	location, err := time.LoadLocation("Europe/Madrid")
+	if err != nil {
+		log.Fatalf("failed to load Madrid timezone: %v", err)
+	}
 
-	_, err := c.AddFunc("@every 20s", func() {
+	c := cron.New(cron.WithLocation(location))
+
+	_, err = c.AddFunc("32 17 * * *", func() {
+		log.Println("scraper creator job is running...")
 		err := cs.scraperCreator.Execute()
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
+			return
 		}
+
+		log.Println("scraper creator job completed successfully")
 	})
 	if err != nil {
-		log.Fatalf("Error adding cron job: %v", err)
+		log.Fatalf("error adding cron job: %v", err)
 	}
 
 	c.Start()

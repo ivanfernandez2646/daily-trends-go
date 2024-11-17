@@ -6,12 +6,15 @@ require (
 	github.com/bxcodec/faker/v3 v3.8.1
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/google/uuid v1.6.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
+	github.com/joho/godotenv v1.5.1
+	github.com/jonboulle/clockwork v0.4.0
 	github.com/stretchr/testify v1.9.0
 	go.mongodb.org/mongo-driver/v2 v2.0.0-beta2
 )
 
-require github.com/jonboulle/clockwork v0.4.0 // indirect
+require github.com/felixge/httpsnoop v1.0.3 // indirect
 
 require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect

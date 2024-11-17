@@ -24,7 +24,7 @@ func (fsc *FeedScraperCreator) Execute() error {
 
 	feeds, err := fsc.scraper.Execute(fsc.extractors)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	for _, feed := range feeds {

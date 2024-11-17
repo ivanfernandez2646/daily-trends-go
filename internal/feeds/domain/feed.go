@@ -12,6 +12,7 @@ type Feed struct {
 	description FeedDescription
 	author      FeedAuthor
 	source      FeedSource
+	url         FeedUrl
 	createdAt   time.Time
 }
 
@@ -64,7 +65,15 @@ func (f *Feed) Description() FeedDescription {
 
 func (f *Feed) Source() FeedSource {
 	return f.source
+}
 
+func (f *Feed) Url() FeedUrl {
+	if f.url == nil {
+		return nil
+	}
+
+	url := *f.url
+	return &url
 }
 
 func (f *Feed) CreatedAt() time.Time {

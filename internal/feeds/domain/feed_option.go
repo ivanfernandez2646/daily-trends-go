@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"fmt"
+	"log"
 	"time"
 )
 
@@ -63,11 +63,24 @@ func WithSource(value string) FeedOption {
 	}
 }
 
+func WithUrl(value string) FeedOption {
+	return func(f *Feed) error {
+		url, err := NewFeedUrl(value)
+		if err != nil {
+			log.Println("error parsing url", err)
+			return err
+		}
+
+		f.url = url
+		return nil
+	}
+}
+
 func WithCreatedAt(value string) FeedOption {
 	return func(f *Feed) error {
 		t, err := time.Parse(time.RFC3339, value)
 		if err != nil {
-			fmt.Println("error parsing created at date:", err)
+			log.Println("error parsing created at date:", err)
 			return err
 		}
 

@@ -4,6 +4,7 @@ import (
 	"daily-trends/go/internal/feeds/application"
 	"daily-trends/go/internal/feeds/domain"
 	shared_domain "daily-trends/go/internal/shared/domain"
+	"log"
 
 	"encoding/json"
 	"fmt"
@@ -28,7 +29,7 @@ func NewPutFeedController(creator *application.FeedCreator) http.HandlerFunc {
 
 		err := creator.Execute(id, &createFeedDto)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 
 			w.Header().Set("Content-Type", "application/json")
 

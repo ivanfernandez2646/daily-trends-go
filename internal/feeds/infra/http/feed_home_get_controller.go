@@ -2,7 +2,6 @@ package xhttp
 
 import (
 	"daily-trends/go/internal/feeds/application"
-	"daily-trends/go/internal/feeds/domain"
 	"daily-trends/go/internal/feeds/infra/http/responses"
 	shared_domain "daily-trends/go/internal/shared/domain"
 	"log"
@@ -10,16 +9,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-func NewGetFeedController(finder *application.FeedFinder) http.HandlerFunc {
+func NewGetFeedHomeController(searcher *application.FeedSearcher) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		id := vars["id"]
-
-		feed, err := finder.Execute(id)
+		feeds, err := searcher.Execute()
 		w.Header().Set("Content-Type", "application/json")
 
 		if err != nil {
@@ -30,10 +24,6 @@ func NewGetFeedController(finder *application.FeedFinder) http.HandlerFunc {
 				w.WriteHeader(http.StatusBadRequest)
 				fmt.Fprintf(w, `{"error": "%s"}`, err)
 				return
-			case domain.FeedNotFoundError:
-				w.WriteHeader(http.StatusNotFound)
-				fmt.Fprintf(w, `{"error": "%s"}`, err)
-				return
 			default:
 				w.WriteHeader(http.StatusInternalServerError)
 				fmt.Fprintf(w, `{"error": "internal server error"}`)
@@ -41,7 +31,7 @@ func NewGetFeedController(finder *application.FeedFinder) http.HandlerFunc {
 			}
 		}
 
-		resDto := responses.NewFeedGetResponse(feed)
+		resDto := responses.NewFeedHomeGetResponse(feeds)
 		bytes, err := json.Marshal(resDto)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
