@@ -19,7 +19,7 @@ func NewCronScraper(scraperCreator *application.FeedScraperCreator) *CronScraper
 func (cs CronScraper) StartJob() {
 	c := cron.New()
 
-	_, err := c.AddFunc("@every 5m", func() {
+	_, err := c.AddFunc("@every 20s", func() {
 		err := cs.scraperCreator.Execute()
 		if err != nil {
 			fmt.Println(err)

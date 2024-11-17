@@ -11,6 +11,8 @@ require (
 	go.mongodb.org/mongo-driver/v2 v2.0.0-beta2
 )
 
+require github.com/jonboulle/clockwork v0.4.0 // indirect
+
 require (
 	github.com/PuerkitoBio/goquery v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.2.0 // indirect

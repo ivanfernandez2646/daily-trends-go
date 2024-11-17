@@ -21,5 +21,5 @@ func (s ElPaisContentExtractor) GetSource() domain.FeedSource {
 }
 
 func (s ElPaisContentExtractor) GetLimit() int {
-	return 20
+	return 5
 }

@@ -22,5 +22,5 @@ func (s ElMundoContentExtractor) GetSource() domain.FeedSource {
 }
 
 func (s ElMundoContentExtractor) GetLimit() int {
-	return 15
+	return 5
 }

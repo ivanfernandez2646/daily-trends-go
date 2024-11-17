@@ -8,6 +8,7 @@ import (
 	xhttp "daily-trends/go/internal/feeds/infra/http"
 	"daily-trends/go/internal/feeds/infra/persistence"
 	"daily-trends/go/internal/feeds/infra/scrap"
+	"daily-trends/go/internal/shared/infra"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -27,8 +28,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	scraper := scrap.NewCollyFeedScraper()
-	creator := application.NewFeedCreator(repo)
+	clock := infra.NewClockworkClock()
+	scraper := scrap.NewCollyFeedScraper(clock)
+	creator := application.NewFeedCreator(repo, clock)
 	finder := application.NewFeedFinder(repo)
 	scraperCreator := application.NewFeedScraperCreator(scraper, []domain.FeedContentExtractor{scrap.ElPaisContentExtractor{}, scrap.ElMundoContentExtractor{}}, repo)
 

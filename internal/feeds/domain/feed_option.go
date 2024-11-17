@@ -1,5 +1,10 @@
 package domain
 
+import (
+	"fmt"
+	"time"
+)
+
 type FeedOption func(*Feed) error
 
 func WithId(value string) FeedOption {
@@ -54,6 +59,19 @@ func WithSource(value string) FeedOption {
 		}
 
 		f.source = source
+		return nil
+	}
+}
+
+func WithCreatedAt(value string) FeedOption {
+	return func(f *Feed) error {
+		t, err := time.Parse(time.RFC3339, value)
+		if err != nil {
+			fmt.Println("error parsing created at date:", err)
+			return err
+		}
+
+		f.createdAt = t
 		return nil
 	}
 }

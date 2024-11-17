@@ -1,14 +1,35 @@
 package domain
 
+import (
+	"time"
+
+	shared_domain "daily-trends/go/internal/shared/domain"
+)
+
 type Feed struct {
 	id          FeedId
 	title       FeedTitle
 	description FeedDescription
 	author      FeedAuthor
 	source      FeedSource
+	createdAt   time.Time
 }
 
-func NewFeed(options ...FeedOption) (*Feed, error) {
+func NewFeed(clock shared_domain.Clock, options ...FeedOption) (*Feed, error) {
+	feed := &Feed{
+		createdAt: clock.Now(),
+	}
+	for _, option := range options {
+		err := option(feed)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return feed, nil
+}
+
+func NewFeedOnlyFromOptions(options ...FeedOption) (*Feed, error) {
 	feed := &Feed{}
 	for _, option := range options {
 		err := option(feed)
@@ -43,4 +64,9 @@ func (f *Feed) Description() FeedDescription {
 
 func (f *Feed) Source() FeedSource {
 	return f.source
+
+}
+
+func (f *Feed) CreatedAt() time.Time {
+	return f.createdAt
 }

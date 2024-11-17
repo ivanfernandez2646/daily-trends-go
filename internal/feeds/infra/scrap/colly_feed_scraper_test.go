@@ -3,13 +3,15 @@ package scrap_test
 import (
 	"daily-trends/go/internal/feeds/domain"
 	"daily-trends/go/internal/feeds/infra/scrap"
+	shared_mocks "daily-trends/go/internal/shared/domain/mocks"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCollyScraper(t *testing.T) {
-	colly := scrap.NewCollyFeedScraper()
+	clock := shared_mocks.NewClockMock()
+	colly := scrap.NewCollyFeedScraper(clock)
 	extractors := []domain.FeedContentExtractor{scrap.ElMundoContentExtractor{}, scrap.ElPaisContentExtractor{}}
 
 	var limit int

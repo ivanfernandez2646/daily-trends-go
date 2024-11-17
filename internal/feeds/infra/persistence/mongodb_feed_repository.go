@@ -84,6 +84,7 @@ func (r *MongoDBFeedRepository) toBSON(feed *domain.Feed) (bson.M, error) {
 		"description": feed.Description(),
 		"author":      feed.Author(),
 		"source":      feed.Source().String(),
+		"createdAt":   feed.CreatedAt().Format(time.RFC3339),
 	}
 
 	if feed.Description() == nil {
@@ -121,12 +122,18 @@ func (r *MongoDBFeedRepository) fromBSON(value bson.M) (*domain.Feed, error) {
 		return nil, fmt.Errorf("invalid source type")
 	}
 
-	feed, err := domain.NewFeed(
+	createdAt, ok := value["createdAt"].(string)
+	if !ok {
+		return nil, fmt.Errorf("invalid createdAt type")
+	}
+
+	feed, err := domain.NewFeedOnlyFromOptions(
 		domain.WithId(id),
 		domain.WithTitle(title),
 		domain.WithDescription(description),
 		domain.WithAuthor(author),
 		domain.WithSource(source),
+		domain.WithCreatedAt(createdAt),
 	)
 
 	if err != nil {

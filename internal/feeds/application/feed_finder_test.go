@@ -7,7 +7,10 @@ import (
 	"daily-trends/go/internal/feeds/domain/mocks"
 	"daily-trends/go/internal/feeds/domain/mothers"
 	shared_domain "daily-trends/go/internal/shared/domain"
+	shared_mocks "daily-trends/go/internal/shared/domain/mocks"
+
 	"errors"
+
 	"fmt"
 	"testing"
 
@@ -18,6 +21,7 @@ func TestFeedFinder(t *testing.T) {
 	t.Parallel()
 
 	repo := mocks.NewFeedRepository(t)
+	clock := shared_mocks.NewClockMock()
 	finder := application.NewFeedFinder(repo)
 
 	t.Run("should return an InvalidArgumentError when uuid is not valid", func(t *testing.T) {
@@ -64,7 +68,7 @@ func TestFeedFinder(t *testing.T) {
 	t.Run("should return a Feed is found", func(t *testing.T) {
 		ctx := context.Background()
 
-		feed, _ := mothers.NewRandomFeed()
+		feed, _ := mothers.NewRandomFeed(clock)
 
 		repo.On("FindById", ctx, feed.Id()).Return(feed, nil)
 

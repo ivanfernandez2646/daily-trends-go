@@ -10,10 +10,12 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-type CollyFeedScraper struct{}
+type CollyFeedScraper struct {
+	clock shared_domain.Clock
+}
 
-func NewCollyFeedScraper() *CollyFeedScraper {
-	return &CollyFeedScraper{}
+func NewCollyFeedScraper(clock shared_domain.Clock) *CollyFeedScraper {
+	return &CollyFeedScraper{clock}
 }
 
 func (p *CollyFeedScraper) Execute(extractors []domain.FeedContentExtractor) ([]*domain.Feed, error) {
@@ -57,7 +59,8 @@ func (p *CollyFeedScraper) processUrl(extractor domain.FeedContentExtractor, res
 		}
 
 		uuid := shared_domain.NewRandomUUID()
-		data, err := domain.NewFeed(domain.WithId(uuid.Value()), domain.WithTitle(txtTitle), domain.WithAuthor(txtAuthor), domain.WithDescription(txtDescription), domain.WithSource(extractor.GetSource().String()))
+
+		data, err := domain.NewFeed(p.clock, domain.WithId(uuid.Value()), domain.WithTitle(txtTitle), domain.WithAuthor(txtAuthor), domain.WithDescription(txtDescription), domain.WithSource(extractor.GetSource().String()))
 		if err != nil {
 			fmt.Printf("error creating new feed from colly scraper: %v\n", err)
 			return
